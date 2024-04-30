@@ -1,23 +1,34 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from ai_engine.open_ai import generate_questions
+from ai_engine.open_ai import generate_questions 
+from typing import Dict
 
-class Item(BaseModel):
-    content: str
+
+class QuestionRequest(BaseModel):
+    typesWithQuantities: Dict[str, int]
     difficulty: str
-    types_of_questions: dict
+    content: str
     
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 @app.post("/generate")
-async def create_item(item: Item):
-    print(item)
-    questions = generate_questions(item.content, item.difficulty, item.types_of_questions)
-    print("QUESTIONS:")
-    print(questions)
-    return {"questions": questions}
+async def generate_questions_api(request_data: QuestionRequest):
+    types_with_quantities = request_data.typesWithQuantities
+    difficulty = request_data.difficulty
+    content = request_data.content
+    generated_questions = generate_questions(content=content, difficulty=difficulty, types_of_questions=types_with_quantities)
+    return generated_questions
 
 
 @app.get("/test")

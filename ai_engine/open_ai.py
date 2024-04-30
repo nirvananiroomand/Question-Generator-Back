@@ -3,7 +3,7 @@ from openai import OpenAI
 from dotenv import load_dotenv
 
 
-def generate_questions(content, difficulty, types_of_questions):
+def generate_questions(content: str, difficulty: str, types_of_questions: dict):
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY2"))
 
     completion = client.chat.completions.create(
