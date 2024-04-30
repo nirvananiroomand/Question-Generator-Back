@@ -25,6 +25,7 @@
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
 
+
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
@@ -328,3 +329,5 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+.idea
