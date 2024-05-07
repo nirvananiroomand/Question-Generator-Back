@@ -7,3 +7,16 @@ class Chat(models.Model):
     content = models.TextField()
     difficulty = models.CharField(max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)
+    response = models.TextField(null=True, blank=True)
+
+
+class ChatQuestion(models.Model):
+    chat = models.ForeignKey('Chat', on_delete=models.CASCADE)
+    question_type = models.CharField(max_length=30)
+    quantity = models.IntegerField()
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['chat', 'question_type'], name='unique_chat_question_type')
+        ]
+
