@@ -1,6 +1,5 @@
 import os
 from openai import OpenAI
-from dotenv import load_dotenv
 
 
 def generate_questions(content: str, difficulty: str, types_of_questions: dict):
@@ -16,9 +15,3 @@ def generate_questions(content: str, difficulty: str, types_of_questions: dict):
     )
 
     return completion.choices[0].message.content
-
-
-if __name__ == '__main__':
-    load_dotenv()
-    generate_questions(content, quantity, difficulty, types_of_questions)
-

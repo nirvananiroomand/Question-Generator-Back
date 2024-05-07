@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
 
+from ai_engine.open_ai import generate_questions
 from chat.models import Chat, ChatQuestion
 from chat.serializers import ChatTitleSerializer, ChatDetailsSerializer, ChatQuestionSerializer, \
     ChatSerializer, ChatCreateSerializer
@@ -20,8 +21,13 @@ def chats_api(request: Request):
         # Create a new chat
         ser = ChatCreateSerializer(data=request.data)
         if ser.is_valid():
-            ser.save()
-            return Response(ser.data, status=status.HTTP_201_CREATED)
+            generated_response = generate_questions(content=ser.validated_data['content'], difficulty=ser.validated_data['difficulty'], types_of_questions=ser.validated_data['chat_questions'])
+            chat = ser.save()
+            chat.response = generated_response
+            chat.save()
+            result = ser.data
+            result['response'] = chat.response
+            return Response(result, status=status.HTTP_201_CREATED)
 
         else:
             return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
