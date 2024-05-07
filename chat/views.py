@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from chat.models import Chat, ChatQuestion
 from chat.serializers import ChatTitleSerializer, ChatDetailsSerializer, ChatQuestionSerializer, \
-    ChatSerializer
+    ChatSerializer, ChatCreateSerializer
 
 
 @api_view(['GET', 'POST'])
