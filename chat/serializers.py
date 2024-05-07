@@ -8,7 +8,7 @@ class ChatTitleSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'created_at')
 
 
-class ChatCreateSerializer(serializers.ModelSerializer):
+class ChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chat
         fields = '__all__'
@@ -21,6 +21,8 @@ class ChatQuestionSerializer(serializers.ModelSerializer):
 
 
 class ChatDetailsSerializer(serializers.ModelSerializer):
+    chat_questions = ChatQuestionSerializer(many=True)
+
     class Meta:
         model = Chat
         fields = '__all__'

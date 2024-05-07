@@ -9,6 +9,10 @@ class Chat(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     response = models.TextField(null=True, blank=True)
 
+    @property
+    def chat_questions(self):
+        return ChatQuestion.objects.filter(chat_id=self.id)
+
 
 class ChatQuestion(models.Model):
     chat = models.ForeignKey('Chat', on_delete=models.CASCADE)
