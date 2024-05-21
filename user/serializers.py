@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from django.contrib.auth import authenticate
+from rest_framework.exceptions import AuthenticationFailed
 
 from user.models import CustomUser
 
@@ -22,3 +24,22 @@ class SignupSerializer(serializers.ModelSerializer):
                                                   password=validated_data['password'],
                                                   email=validated_data['email'])
         return instance
+
+
+class LoginSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(max_length=150)
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = CustomUser
+        fields = ('id', 'username', 'password', 'email', 'date_joined')
+
+    def validate(self, attrs):
+        user = authenticate(username=attrs.get("username"), password=attrs.get("password"))
+        if not user:
+            raise AuthenticationFailed()
+        attrs["id"] = user.id
+        attrs["email"] = user.email
+        attrs["date_joined"] = user.date_joined
+        return attrs
+
