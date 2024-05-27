@@ -13,7 +13,7 @@ from chat.serializers import ChatTitleSerializer, ChatDetailsSerializer, ChatQue
 def chats_api(request: Request):
     if request.method == 'GET':
         # Retrieve all chats
-        query_set = Chat.objects.all().order_by('-created_at')
+        query_set = Chat.objects.filter(user=request.user).order_by('-created_at')
         ser = ChatTitleSerializer(query_set, many=True)
         return Response({'chats': ser.data}, status=status.HTTP_200_OK)
 

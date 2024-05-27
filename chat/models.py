@@ -1,8 +1,11 @@
 from django.db import models
 
+from user.models import CustomUser
+
 
 # Create your models here.
 class Chat(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     content = models.TextField()
     difficulty = models.CharField(max_length=30)
@@ -23,4 +26,3 @@ class ChatQuestion(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['chat', 'question_type'], name='unique_chat_question_type')
         ]
-
