@@ -1,3 +1,4 @@
+from django.utils import timezone
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -23,6 +24,8 @@ def signup_api(request, *args, **kwargs):
     ser = SignupSerializer(data=request.data)
     if ser.is_valid():
         user = ser.save()
+        user.last_login = timezone.now()
+        user.save()
         response = ser.data
         response['tokens'] = obtain_tokens(user)
         return Response(response, status=status.HTTP_201_CREATED)
@@ -37,6 +40,8 @@ def login_api(request, *args, **kwargs):
     if ser.is_valid():
         response = ser.data
         user = CustomUser.objects.get(id=ser.validated_data.get("id"))
+        user.last_login = timezone.now()
+        user.save()
         response['tokens'] = obtain_tokens(user)
         return Response(response, status=status.HTTP_200_OK)
     else:
